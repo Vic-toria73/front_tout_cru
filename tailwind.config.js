@@ -11,8 +11,11 @@ export default {
         background: '#FFFFFF',
         'background-alt': '#EEEBEB',
         primary: '#2ECC71',
-        link: '#2ECC71',
+        link: '#2ECC71',  
       },
+      fontFamily: {
+      sans: ['Poppins', 'sans-serif'],
+    },
     },
   },
   plugins: [],
