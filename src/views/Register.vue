@@ -1,106 +1,73 @@
-<template>
-  <div class="success-message" v-if="message">
-    <div class="success-icon">
-      <UserCheck class="w-5 h-5" />
-    </div>
-    {{ message }}
-  </div>
-  <div class="min-h-52 bg-background flex flex-col relative">
-    <div class="absolute left-1/2 -translate-x-1/2 top-[calc(100%-40px)] z-10">
-      <div class="bg-background-alt w-20 h-20 rounded-full flex items-center justify-center">
-        <CircleUser class="w-16 h-16 text-primary" />
-      </div>
-    </div>
-  </div>
-
-  <main class="flex-1 bg-background-alt flex items-center justify-center p-4 rounded-t-3xl">
-    <div class="w-full max-w-md">
-      <div class="rounded-3xl overflow-hidden">
-        <div class="pb-8 px-6 text-center">
-          <div class="h-10 mb-6"></div>
-
-          <h1 class="text-text text-xl font-bold mb-3">Créer un compte</h1>
-          <p class="text-text text-sm leading-relaxed">
-            Envie de te simplifier la vie pour calculer les rations de<br>
-            ton compagnon rejoins nous.
-          </p>
-        </div>
-
-        <div class="px-8 pb-8 pt-6">
-          <form @submit.prevent="handleSubmit" class="space-y-4">
-            <input v-model="form.email" type="email" placeholder="Ton email"
-              class="w-full p-3 bg-white border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
-              required>
-
-            <div class="relative">
-              <input v-model="form.password" :type="showPassword ? 'text' : 'password'" placeholder="Mot de passe"
-                class="w-full p-3 pr-10 bg-white border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
-                required>
-              <button type="button" @click="showPassword = !showPassword"
-                class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">
-                <Eye />
-              </button>
-            </div>
-
-            <div class="relative">
-              <input v-model="form.confirmPassword" :type="showConfirmPassword ? 'text' : 'password'"
-                placeholder="Confirmation mot de passe"
-                class="w-full p-3 pr-10 bg-white border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
-                required>
-              <button type="button" @click="showConfirmPassword = !showConfirmPassword"
-                class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">
-                <Eye />
-              </button>
-            </div>
-
-            <button type="submit"
-              class="w-full bg-primary text py-3 rounded-lg font-semibold text-sm hover:opacity-90 transition mt-6">
-              Créer mon compte
-            </button>
-
-            <p class="text-center text-xs text-text mt-4">
-              Déjà un compte?
-              <router-link to="/login" class="text-link font-semibold hover:underline">
-                Connectes-toi!
-              </router-link>
-            </p>
-          </form>
-        </div>
-      </div>
-    </div>
-  </main>
-</template>
-
 <script setup lang="ts">
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+import AuthLayout from '@/components/AuthLayout.vue';
+import PasswordInput from '@/components/PasswordInput.vue';
 
 defineOptions({
   name: 'RegisterPage',
 });
 
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
-import { CircleUser, Eye } from 'lucide-vue-next';
-
-const router = useRouter()
+const router = useRouter();
+const shouldPlayBark =ref(false);
 
 const form = ref({
   email: '',
   password: '',
   confirmPassword: ''
-})
+});
 
-const showPassword = ref(false)
-const showConfirmPassword = ref(false)
-
-const handleSubmit = () => {
+const handleSubmit = async () => {
   if (form.value.password !== form.value.confirmPassword) {
     alert('Les mots de passe ne correspondent pas!')
     return
   }
 
-  console.log('Inscription:', form.value)
-
-
-  router.push('/login')
-}
+  try {
+    // TODO: Appel API pour l'inscription
+    console.log('Inscription:', form.value);
+    
+    // Simulation d'une inscription réussie
+    // await registerAPI(form.value);
+    
+    // Déclencher le son d'aboiement
+    shouldPlayBark.value = true;
+    
+    // Attendre un peu avant de rediriger
+    setTimeout(() => {
+      router.push('/login');
+    }, 1500);
+    
+  } catch (error) {
+    console.error('Erreur lors de l\'inscription:', error);
+    alert('Erreur lors de la création du compte');
+  }
+};
 </script>
+
+<template>
+  <AuthLayout title="Créer un compte"
+    description="Envie de te simplifier la vie pour calculer les rations de ton compagnon rejoins nous."
+    :play-sound="shouldPlayBark"
+    sound-url="/sounds/bark.mp3"
+    success-text="Compte créé ! 🏆">
+    <form @submit.prevent="handleSubmit" class="space-y-4">
+      <input v-model="form.email" type="email" placeholder="Ton email"
+        class="w-full p-3 bg-white border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
+        required>
+
+      <PasswordInput v-model="form.password" placeholder="Mot de passe" />
+
+      <PasswordInput v-model="form.confirmPassword" placeholder="Confirmation mot de passe" />
+      <button type="submit"
+        class="w-full bg-primary text py-3 rounded-lg font-semibold text-sm hover:opacity-90 transition mt-6">
+        Créer mon compte
+      </button>
+      <p class="text-center text-xs text-text mt-4">Déjà un compte ?
+        <router-link to="/login" class="text-link font-semibold hover:underline">
+          Connectes-toi!
+        </router-link>
+      </p>
+    </form>
+  </AuthLayout>
+</template>
