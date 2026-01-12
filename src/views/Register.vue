@@ -3,16 +3,18 @@ import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import AuthLayout from '@/components/AuthLayout.vue';
 import PasswordInput from '@/components/PasswordInput.vue';
+import { register } from '@/services/authService';
 
 defineOptions({
   name: 'RegisterPage',
 });
 
 const router = useRouter();
-const shouldPlayBark =ref(false);
+const shouldPlayBark = ref(false);
 
 const form = ref({
   email: '',
+  firstName: '',
   password: '',
   confirmPassword: ''
 });
@@ -24,20 +26,18 @@ const handleSubmit = async () => {
   }
 
   try {
-    // TODO: Appel API pour l'inscription
-    console.log('Inscription:', form.value);
-    
-    // Simulation d'une inscription réussie
-    // await registerAPI(form.value);
-    
+    const response = await register(form.value);
+    console.log('Inscription réussie:', response);
+
+
     // Déclencher le son d'aboiement
     shouldPlayBark.value = true;
-    
+
     // Attendre un peu avant de rediriger
     setTimeout(() => {
       router.push('/login');
     }, 1500);
-    
+
   } catch (error) {
     console.error('Erreur lors de l\'inscription:', error);
     alert('Erreur lors de la création du compte');
@@ -48,11 +48,13 @@ const handleSubmit = async () => {
 <template>
   <AuthLayout title="Créer un compte"
     description="Envie de te simplifier la vie pour calculer les rations de ton compagnon rejoins nous."
-    :play-sound="shouldPlayBark"
-    sound-url="/sounds/bark.mp3"
-    success-text="Compte créé ! 🏆">
+    :play-sound="shouldPlayBark" sound-url="/sounds/bark.mp3" success-text="Compte créé ! 🏆">
     <form @submit.prevent="handleSubmit" class="space-y-4">
       <input v-model="form.email" type="email" placeholder="Ton email"
+        class="w-full p-3 bg-white border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
+        required>
+
+      <input v-model="form.firstName" type="firstName" placeholder="Ton prénom"
         class="w-full p-3 bg-white border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
         required>
 
