@@ -49,7 +49,9 @@ const playBarkSound = async () => {
         <div class="min-h-52 bg-background flex flex-col relative">
             <div class="absolute left-1/2 -translate-x-1/2 top-[calc(100%-40px)] z-10">
                 <div class="bg-background-alt w-20 h-20 rounded-full flex items-center justify-center">
-                    <CircleUser class="w-16 h-16 text-primary" />
+                    <slot name="icon">
+                        <CircleUser class="w-16 h-16 text-primary" />
+                    </slot>
                 </div>
             </div>
         </div>

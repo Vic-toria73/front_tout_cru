@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-import AuthLayout from '@/components/AuthLayout.vue';
-import PasswordInput from '@/components/PasswordInput.vue';
-import { register } from '@/services/authService';
+import AuthLayout from '../components/AuthLayout.vue';
+import PasswordInput from '../components/PasswordInput.vue';
+import { register } from '../services/authService';
+
 
 defineOptions({
   name: 'RegisterPage',
@@ -28,12 +29,8 @@ const handleSubmit = async () => {
   try {
     const response = await register(form.value);
     console.log('Inscription réussie:', response);
-
-
-    // Déclencher le son d'aboiement
     shouldPlayBark.value = true;
 
-    // Attendre un peu avant de rediriger
     setTimeout(() => {
       router.push('/login');
     }, 1500);
