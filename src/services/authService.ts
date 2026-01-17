@@ -29,6 +29,6 @@ export const login = async (data: LoginData) => {
   return response.data;
 };
 
-logout() {
+export const logout = () => {
   localStorage.removeItem("token");
-}
+};

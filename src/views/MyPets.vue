@@ -12,5 +12,7 @@ defineOptions({
         <template #icon>
             <Dog class="w-16 h-16 text-primary" />
         </template>
+
+        <div class="flexbox"></div>
     </AuthLayout>
 </template>

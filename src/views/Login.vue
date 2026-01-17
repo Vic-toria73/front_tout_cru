@@ -39,13 +39,13 @@ const handleSubmit = async () => {
 <template>
   <AuthLayout
     title="Connecte-toi"
-    description="Tes calculs de rations seront toujours à portée de main"
+    description="Tes calculs de rations seront toujours à portée de patte"
     :play-sound="shouldPlayBark"
     sound-url="/sounds/bark.mp3"
     success-text="Bienvenue ! 🐶"
   >
     <template #icon>
-      <PawPrint class="w-16 h-16 text-primary" />
+      <PawPrint class="w-16 h-16 text-primary -rotate-45" />
     </template>
 
     <form @submit.prevent="handleSubmit" class="space-y-4">
