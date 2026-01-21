@@ -1,80 +1,65 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import AuthLayout from '../components/AuthLayout.vue';
-import PasswordInput from '../components/PasswordInput.vue';
-import { login } from '../services/authService';
-import { PawPrint } from 'lucide-vue-next';
-
+import AuthLayout from '../components/AuthLayout.vue'
+import PasswordInput from '../components/Input.vue'
+import { login } from '../services/authService'
+import { PawPrint } from 'lucide-vue-next'
+import { useToast } from 'vue-toastification'
 
 defineOptions({
-    name: 'LoginPage',
-});
+  name: 'LoginPage',
+})
 
-const router = useRouter();
-const shouldPlayBark = ref(false);
+const router = useRouter()
+const toast = useToast()
+const shouldPlayBark = ref(false)
 
 const form = ref({
-    email: '',
-    password: ''
+  email: '',
+  password: '',
 })
 
 const handleSubmit = async () => {
-    try {
-      const response = await login(form.value);
-      console.log('Connexion:', response);
-      shouldPlayBark.value = true;
+  try {
+    const response = await login(form.value)
+    console.log('Connexion:', response)
 
-      setTimeout(() => {
-        router.push('/home');
-      }, 1500);
+    toast.success('Connexion réussie ! 🥳')
+    shouldPlayBark.value = true
 
-    } catch (error) {
-      console.error('Erreur de connexion', error);
-      alert('Erreur lors de la connexion');
-    }
-};
+    setTimeout(() => {
+      router.push('/home')
+    }, 1500)
+  } catch (error) {
+    console.error('Erreur de connexion', error)
+    toast.error('Erreur lors de la connexion')
+  }
+}
 </script>
 
 <template>
-  <AuthLayout
-    title="Connecte-toi"
-    description="Tes calculs de rations seront toujours à portée de patte"
-    :play-sound="shouldPlayBark"
-    sound-url="/sounds/bark.mp3"
-    success-text="Bienvenue ! 🐶"
-  >
+  <AuthLayout title="Connecte-toi" description="Tes calculs de rations seront toujours à portée de patte"
+    :play-sound="shouldPlayBark" sound-url="/sounds/bark.mp3">
     <template #icon>
       <PawPrint class="w-16 h-16 text-primary -rotate-45" />
     </template>
 
     <form @submit.prevent="handleSubmit" class="space-y-4">
-      <input
-        v-model="form.email"
-        type="email"
-        placeholder="Ton email"
+      <input v-model="form.email" type="email" placeholder="Ton email"
         class="w-full p-3 bg-white border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
-        required
-      >
+        required />
 
-      <PasswordInput
-        v-model="form.password"
-        placeholder="Mot de passe"
-      />
+      <PasswordInput v-model="form.password" placeholder="Mot de passe" />
 
-      <button
-        type="submit"
-        class="w-full bg-primary py-3 rounded-lg font-semibold text-sm hover:opacity-90 transition mt-6"
-      >
+      <button type="submit"
+        class="w-full bg-primary py-3 rounded-lg font-semibold text-sm hover:opacity-90 transition mt-6">
         Connexion
       </button>
 
       <p class="text-center text-xs text-text mt-4">
         Pas de compte ?
-        <router-link
-          to="/register"
-          class="text-link font-semibold hover:underline"
-        >
+        <router-link to="/register" class="text-link font-semibold hover:underline">
           Rejoins-nous !
         </router-link>
       </p>

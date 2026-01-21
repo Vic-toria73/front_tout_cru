@@ -5,6 +5,7 @@ import HomePage from '../views/Home.vue'
 import AccountPage from '../views/MyAccount.vue'
 import PetsPage from '../views/MyPets.vue'
 import CalculatorPage from '../views/Calculator.vue'
+import AddMyPet from '../views/AddPet.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -42,6 +43,11 @@ const router = createRouter({
       path: '/calculator',
       name: 'calculator',
       component: CalculatorPage,
+    },
+    {
+      path: '/addpet',
+      name: 'addmypet',
+      component: AddMyPet,
     },
   ],
 })

@@ -1,18 +1,21 @@
 <script setup lang="ts">
-import PasswordInput from '../components/PasswordInput.vue';
-import AuthLayout from '../components/AuthLayout.vue';
-import { Dog } from 'lucide-vue-next';
-import { onMounted, ref } from 'vue';
-import { getCurrentUser, updateMyAccount, updateMyPassword } from '../services/userService';
+import AuthLayout from '../components/AuthLayout.vue'
+import { Dog } from 'lucide-vue-next'
+import { onMounted, ref } from 'vue'
+import { getCurrentUser, updateMyAccount, updateMyPassword } from '../services/userService'
+import { useToast } from 'vue-toastification'
+import Button from '../components/Button.vue'
+import Input from '../components/Input.vue'
 
 defineOptions({
   name: 'AccountPage',
-});
+})
 
+const toats = useToast()
 const user = ref({
   email: '',
   firstName: '',
-});
+})
 
 const initialData = ref({
   email: '',
@@ -21,18 +24,17 @@ const initialData = ref({
 
 onMounted(async () => {
   try {
-    const response = await getCurrentUser();
+    const response = await getCurrentUser()
     //stock les données
     user.value = response.data
-    initialData.value = { ...response.data }; //copie pour comparer
+    initialData.value = { ...response.data } //copie pour comparer
 
     //pré-remplir le form
-    user.value.email = response.data.email;
-    user.value.firstName = response.data.firstName;
-
+    user.value.email = response.data.email
+    user.value.firstName = response.data.firstName
   } catch (error) {
-    console.log('Erreur chargement utilisateur:', error);
-    alert('Erreur lors du chargement de ton compte');
+    console.log('Erreur chargement utilisateur:', error)
+    toats.error('Erreur lors du chargement de ton compte')
   }
 })
 
@@ -41,65 +43,68 @@ const handleSubmit = async () => {
     //verifie si changement
     const profileChanged =
       user.value.email !== initialData.value.email ||
-      user.value.firstName !== initialData.value.firstName;
+      user.value.firstName !== initialData.value.firstName
 
     if (!profileChanged) {
-      alert('Aucune modification détectée');
-      return;
+      toats.error('Aucune modification détectée')
+      return
     }
 
     // appel l'api
     await updateMyAccount({
       email: user.value.email,
-      firstName: user.value.firstName
-    });
+      firstName: user.value.firstName,
+    })
 
-    initialData.value = { ...user.value };
+    initialData.value = { ...user.value }
 
-    alert('Profil mis à jour !')
+    toats.success('Profil mis à jour !')
   } catch (error) {
-    console.log('Erreur', error);
-    alert('Erreur lors de la modification');
-
+    console.log('Erreur', error)
+    toats.error('Erreur lors de la modification')
   }
-};
+}
 
 const passwordForm = ref({
   oldPassword: '',
   newPassword: '',
-  confirmPassword: ''
-});
+  confirmPassword: '',
+})
 
 const handleSubmitPassword = async () => {
   try {
-    if (!passwordForm.value.newPassword || !passwordForm.value.confirmPassword || !passwordForm.value.oldPassword) {
-      alert('Veuillez remplir tous les champs');
-      return;
-    };
+    if (
+      !passwordForm.value.newPassword ||
+      !passwordForm.value.confirmPassword ||
+      !passwordForm.value.oldPassword
+    ) {
+      toats.info('Veuillez remplir tous les champs')
+      return
+    }
 
     if (passwordForm.value.newPassword !== passwordForm.value.confirmPassword) {
-      alert('Les mots de passe ne correspondent pas');
-      return;
-    };
+      toats.warning('Les mots de passe ne correspondent pas')
+      return
+    }
 
     await updateMyPassword({
       oldPassword: passwordForm.value.oldPassword,
       newPassword: passwordForm.value.newPassword,
-      confirmPassword: passwordForm.value.confirmPassword
-    });
+      confirmPassword: passwordForm.value.confirmPassword,
+    })
 
     passwordForm.value = {
       oldPassword: '',
       newPassword: '',
-      confirmPassword: ''
-    };
+      confirmPassword: '',
+    }
 
-    alert('Mot de passe mis à jour !')
+    toats.success('Mot de passe mis à jour !')
   } catch (error) {
-    console.error('Erreur:', error);
-    alert('Erreur lors du changement de mot de passe');
+    console.error('Erreur:', error)
+    toats.error('Erreur lors du changement de mot de passe')
   }
-};
+}
 </script>
 <template>
   <AuthLayout :title="`Bienvenue ${user.firstName} sur ton Compte`" description="Tu peux le modifier ici ⬇️">
@@ -110,13 +115,15 @@ const handleSubmitPassword = async () => {
     <form @submit.prevent="handleSubmit" class="space-y-4 mb-8">
       <h3 class="font-semibold text-lg">Modifier mon profil</h3>
 
+      <label>Ton email</label>
       <input v-model="user.email" type="email" placeholder="Ton email"
         class="w-full p-3 bg-white border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
-        required>
+        required />
 
+      <label>Ton prénom</label>
       <input v-model="user.firstName" type="text" placeholder="Ton prénom"
         class="w-full p-3 bg-white border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
-        required>
+        required />
 
       <button type="submit"
         class="w-full bg-primary text py-3 rounded-lg font-semibold text-sm hover:opacity-90 transition">
@@ -124,21 +131,17 @@ const handleSubmitPassword = async () => {
       </button>
     </form>
 
-
     <form @submit.prevent="handleSubmitPassword" class="space-y-4">
       <h3 class="font-semibold text-lg">Changer mon mot de passe</h3>
+      <label>Mot de passe actuel</label>
+      <Input v-model="passwordForm.oldPassword" placeholder="Ancien mot de passe" />
+      <label>Nouveau mot de passe</label>
+      <Input v-model="passwordForm.newPassword" placeholder="Nouveau mot de passe" />
+      <label>Confirmation du nouveau mot de passe</label>
+      <Input v-model="passwordForm.confirmPassword" placeholder="Confirmation du nouveau mot de passe" />
 
-      <PasswordInput v-model="passwordForm.oldPassword" placeholder="Ancien mot de passe" />
-
-      <PasswordInput v-model="passwordForm.newPassword" placeholder="Nouveau mot de passe" />
-
-      <PasswordInput v-model="passwordForm.confirmPassword" placeholder="Confirmation du nouveau mot de passe" />
-
-      <button type="submit"
-        class="w-full bg-primary text py-3 rounded-lg font-semibold text-sm hover:opacity-90 transition">Changer mon mot
-        de
-        passe
-      </button>
+      <Button type="submit" text="Modifier mon mot de passe" ariaLabel="Modifier le mot de passe de mon profil"
+        </Button>
     </form>
   </AuthLayout>
 </template>
