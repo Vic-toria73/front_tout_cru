@@ -3,11 +3,11 @@ import AuthLayout from '../components/AuthLayout.vue';
 import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useToast } from 'vue-toastification';
-import { createAnimal, getBreeds } from '../services/animalService';
-import { type AnimalCreateData } from '../services/animalService';
+import { createAnimal, getBreeds, type AnimalCreate } from '../services/animalService';
 import { Dog } from 'lucide-vue-next';
-import { ACTIVITY_LEVELS, LIFE_STAGES } from '../services/animalService';
+import { activityLevels, lifeStages } from '../services/animalService';
 import Button from '../components/Button.vue';
+import AddPicture from '../components/AddPicture.vue';
 
 defineOptions
     ({
@@ -22,6 +22,7 @@ const formMyPet = ref({
     species: '',
     name: '',
     breedId: undefined as number | undefined,
+    pictureId: '',
     birth: '',
     weight: 0,
     activityLevel: '' as 'SEDENTARY' | 'NORMAL' | 'ACTIVE' | 'VERY_ACTIVE' | '',
@@ -29,12 +30,12 @@ const formMyPet = ref({
     treatments: ''
 });
 
-const breeds = ref<any[]>([]);
+const breeds = ref<Array<{ id: number; name: string }>>([]);
+
 
 onMounted(async () => {
     try {
-        const response = await getBreeds();
-        breeds.value = response.data;
+        breeds.value = await getBreeds();
     } catch (error) {
         console.error('Erreur chargeemnt races:', error);
     };
@@ -42,26 +43,35 @@ onMounted(async () => {
 
 const handleSubmitAddPet = async () => {
     try {
-        if (!formMyPet.value.activityLevel || !formMyPet.value.lifeStage) {
-            toast.error('Veuillez remplir tous les champs obligatoires'); 
+        if (
+            !formMyPet.value.name ||
+            !formMyPet.value.breedId ||
+            !formMyPet.value.birth ||
+            !formMyPet.value.activityLevel ||
+            !formMyPet.value.lifeStage
+        ) {
+            toast.error('Veuillez remplir tous les champs obligatoires');
             return;
         }
         const weight = Number(formMyPet.value.weight);
-    if (isNaN(weight) || weight <= 0) {
-      toast.error('Le poids doit être un nombre valide');
-      return;
-    }
-        await createAnimal({
-    species: 'DOG',
-      name: formMyPet.value.name,
-      breedId: formMyPet.value.breedId || undefined,  // null devient undefined
-      birth: formMyPet.value.birth,
-      weight: weight,
-      activityLevel: formMyPet.value.activityLevel,
-      lifeStage: formMyPet.value.lifeStage,
-      treatments: formMyPet.value.treatments || undefined
-    });
-console.log(formMyPet.value);
+        if (isNaN(weight) || weight <= 0) {
+            toast.error('Le poids doit être un nombre valide');
+            return;
+        }
+
+        const animalData: AnimalCreate = {
+            species: 'DOG',
+            name: formMyPet.value.name,
+            breedId: formMyPet.value.breedId,
+            birth: formMyPet.value.birth,
+            weight: weight,
+            activityLevel: formMyPet.value.activityLevel,
+            lifeStage: formMyPet.value.lifeStage,
+            treatments: formMyPet.value.treatments || undefined,
+        };
+
+        await createAnimal(animalData);
+        console.log(formMyPet.value);
         toast.success('Profil créé ! 🐕');
         shouldPlayBark.value = true;
 
@@ -77,12 +87,11 @@ console.log(formMyPet.value);
 </script>
 <template>
     <AuthLayout :title="'Création du profil de ton compagnon'"
-        description="Renseignes tous les champs. Pour le poids c'est en kg au min 0,5kg "
-        :play-sound="shouldPlayBark" sound-url="/sounds/bark.mp3">
+        description="Renseignes tous les champs. Pour le poids c'est en kg au min 0,5kg " :play-sound="shouldPlayBark"
+        sound-url="/sounds/bark.mp3">
         <template #icon>
             <Dog class="w-16 h-16 text-primary" />
         </template>
-
         <form @submit.prevent="handleSubmitAddPet" class="space-y-4">
             <label class="text-text">Quel est son prénom ?</label>
             <input v-model="formMyPet.name" type="name" id="datemin" name="datemin" min="Date.now()"
@@ -113,7 +122,7 @@ console.log(formMyPet.value);
             <select v-model="formMyPet.activityLevel"
                 class="w-full p-3 bg-white border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
                 aria-label="Choisir son activité physique">
-                <option v-for="level in ACTIVITY_LEVELS" :key="level.value" :value="level.value">
+                <option v-for="level in activityLevels" :key="level.value" :value="level.value">
                     {{ level.label }}
                 </option>
             </select>
@@ -122,7 +131,7 @@ console.log(formMyPet.value);
             <select v-model="formMyPet.lifeStage"
                 class="w-full p-3 bg-white border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
                 aria-label="Choisir son activité physique">
-                <option v-for="life in LIFE_STAGES" :key="life.value" :value="life.value">
+                <option v-for="life in lifeStages" :key="life.value" :value="life.value">
                     {{ life.label }}
                 </option>
             </select>
@@ -131,7 +140,7 @@ console.log(formMyPet.value);
             <textarea v-model="formMyPet.treatments" placeholder="Traitements ou allergies"
                 class="w-full p-3 bg-white border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
                 rows=" 3"></textarea>
-        <Button type="submit" text="Créer le profil"  ariaLabel="Créer le profil de mon animal" />
-        </form>    
+            <Button type="submit" text="Créer le profil" ariaLabel="Créer le profil de mon animal" />
+        </form>
     </AuthLayout>
 </template>

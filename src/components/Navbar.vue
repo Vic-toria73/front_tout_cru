@@ -31,13 +31,14 @@ function onLogout() {
         <PawPrint />
       </router-link>
 
-      <button @click="isMenuOpen = !isMenuOpen" class="text text-2xl">
-        <Menu />
-      </button> 
-      
-    <!-- togglerMenu menu devient X -->
+      <button @click="isMenuOpen = !isMenuOpen" class="text text-2xl" aria-label="Menu">
+        <Menu v-if="!isMenuOpen" />
+        <SquareX v-else />
+      </button>
 
-      <Transition name="slide"> 
+      <!-- togglerMenu menu devient X -->
+
+      <Transition name="slide">
         <div v-if="isMenuOpen"
           class="fixed top-0 right-0 h-full w-64 bg-primary shadow-lg z-50 p-6 flex flex-col justify-center gap-4">
           <button @click="isMenuOpen = false" class="absolute top-4 right-4 text-2xl hover:opacity-70 transition"
@@ -60,10 +61,6 @@ function onLogout() {
 
           <div v-else
             class="fixed top-0 right-0 h-full w-64 bg-primary shadow-lg z-50 p-6 flex flex-col justify-center gap-4">
-            <button @click="isMenuOpen = false" class="absolute top-4 right-4 text-2xl hover:opacity-70 transition"
-              aria-label="Fermer le menu">
-              <SquareX />
-            </button>
             <router-link class="flex items-center h-12 px-4 hover:bg-background-alt/100 rounded-xl transition"
               @click="isMenuOpen = false" to="/login">Connexion</router-link>
             <router-link class="flex items-center h-12 px-4 hover:bg-background-alt/100 rounded-xl transition"
