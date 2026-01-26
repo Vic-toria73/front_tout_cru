@@ -1,10 +1,9 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
-import AuthLayout from '../components/AuthLayout.vue'
-import { Dog } from 'lucide-vue-next'
-import AddPet from './AddPet.vue'
-import AddPetCard from '../components/AddPetCard.vue';
-import PetCard from '../components/PetCard.vue';
+import AuthLayout from '../components/AuthLayout.vue';
+import { Dog } from 'lucide-vue-next';
+import AddPetCard from '../components/cards/AddPetCard.vue';
+import PetCard from '../components/cards/PetCard.vue';
 import { getMyAnimal, type Animal } from '../services/animalService';
 
 defineOptions({

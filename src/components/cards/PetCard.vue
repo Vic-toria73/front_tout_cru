@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { computed } from 'vue';
-import AuthLayout from '../components/AuthLayout.vue'
+import AuthLayout from '../../components/AuthLayout.vue'
 import { Dog } from 'lucide-vue-next'
-import AddPetCard from '../components/AddPetCard.vue';
-import PetCard from '../components/PetCard.vue';
-import { activityLevels, lifeStages, getMyAnimal, type Animal } from '../services/animalService';
+import AddPetCard from '../cards/AddPetCard.vue';
+import PetCard from './PetCard.vue';
+import { activityLevels, lifeStages, getMyAnimal, type Animal } from '../../services/animalService';
 
 defineOptions({
   name: 'PetsPage',
@@ -60,7 +60,8 @@ const displayAge = computed(() => {
 </script>
 
 <template>
-<div class="card w-full max-w-sm md:max-w-md lg:max-w-lg p-4 rounded-lg bg-white border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
+  <div
+    class="card w-full max-w-sm md:max-w-md lg:max-w-lg p-4 rounded-lg bg-white border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
     <router-link :to="`/animals/${animal.id}`" class="block">
       <div class="flex items-center gap-3 mb-3">
         <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
@@ -68,7 +69,7 @@ const displayAge = computed(() => {
         </div>
         <h2 class="text-xl font-bold text-gray-800">{{ animal.name }}</h2>
       </div>
-      
+
       <ul class="space-y-2 text-sm text-gray-600">
         <li><span class="font-semibold">Race :</span> {{ breedName }}</li>
         <li><span class="font-semibold">Âge :</span> {{ displayAge }}</li>

@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import AuthLayout from '../components/AuthLayout.vue'
-import { Dog } from 'lucide-vue-next'
-import { onMounted, ref } from 'vue'
-import { getCurrentUser, updateMyAccount, updateMyPassword } from '../services/userService'
-import { useToast } from 'vue-toastification'
-import Button from '../components/Button.vue'
-import Input from '../components/Input.vue'
+import AuthLayout from '../components/AuthLayout.vue';
+import { Dog } from 'lucide-vue-next';
+import { onMounted, ref } from 'vue';
+import { getCurrentUser, updateMyAccount, updateMyPassword } from '../services/userService';
+import { useToast } from 'vue-toastification';
+import Button from '../components/Button.vue';
+import Input from '../components/PasswordInput.vue';
 
 defineOptions({
   name: 'AccountPage',
@@ -107,7 +107,7 @@ const handleSubmitPassword = async () => {
 }
 </script>
 <template>
-  <AuthLayout :title="`Bienvenue ${user.firstName} sur ton Compte`" description="Tu peux le modifier ici ⬇️">
+  <AuthLayout :title="`Bienvenue ${user.firstName} sur ton compte`" description="Tu peux le modifier ici ⬇️">
     <template #icon>
       <Dog class="w-16 h-16 text-primary" />
     </template>

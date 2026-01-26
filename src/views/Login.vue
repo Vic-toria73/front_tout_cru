@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { useRouter } from 'vue-router'
-import AuthLayout from '../components/AuthLayout.vue'
-import PasswordInput from '../components/Input.vue'
-import { login } from '../services/authService'
-import { PawPrint } from 'lucide-vue-next'
-import { useToast } from 'vue-toastification'
+import { useRouter } from 'vue-router';
+import AuthLayout from '../components/AuthLayout.vue';
+import PasswordInput from '../components/PasswordInput.vue';
+import { login } from '../services/authService';
+import { PawPrint } from 'lucide-vue-next';
+import { useToast } from 'vue-toastification';
+import Input from '../components/Input.vue';
 
 defineOptions({
   name: 'LoginPage',
@@ -46,7 +47,7 @@ const handleSubmit = async () => {
     </template>
 
     <form @submit.prevent="handleSubmit" class="space-y-4">
-      <input v-model="form.email" type="email" placeholder="Ton email"
+      <Input v-model="form.email" type="email" placeholder="Ton email"
         class="w-full p-3 bg-white border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
         required />
 

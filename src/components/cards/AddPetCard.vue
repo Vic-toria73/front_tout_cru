@@ -1,7 +1,5 @@
 <script setup lang="ts">
 import { HeartPlus } from 'lucide-vue-next';
-
-
 </script>
 <template>
     <div
