@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { useRouter } from 'vue-router';
-import AuthLayout from '../components/AuthLayout.vue';
-import PasswordInput from '../components/Input.vue';
+import PasswordInput from '../components/PasswordInput.vue';
 import { register } from '../services/authService';
 import { useToast } from 'vue-toastification';
 import Button from '../components/Button.vue';
+import Input from '../components/Input.vue';
+import LayoutForm from '../components/LayoutForm.vue';
 
 defineOptions({
   name: 'RegisterPage',
@@ -22,9 +23,26 @@ const form = ref({
   confirmPassword: '',
 });
 
+const passwordMismatchError = computed(() => {
+  if (!form.value.confirmPassword) return ''
+  if (form.value.password !== form.value.confirmPassword) {
+    return 'Les mots de passe ne correspondent pas'
+  }
+  return ''
+})
+
+const isFormValid = computed(() => {
+  return (
+    form.value.email &&
+    form.value.firstName &&
+    form.value.password.length >= 8 &&
+    !passwordMismatchError.value
+  )
+})
+
 const handleSubmit = async () => {
   if (form.value.password !== form.value.confirmPassword) {
-    toast.warning('Les mots de passe ne correspondent pas.');
+    toast.warning('Corriges les erreurs du formulaire.');
     return;
   };
 
@@ -46,22 +64,24 @@ const handleSubmit = async () => {
 </script>
 
 <template>
-  <AuthLayout title="Créer un compte"
+  <LayoutForm title="Créer un compte"
     description="Envie de te simplifier la vie pour calculer les rations de ton compagnon rejoins nous."
     :play-sound="shouldPlayBark" sound-url="/sounds/bark.mp3">
     <form @submit.prevent="handleSubmit" class="space-y-4">
-      <input v-model="form.email" type="email" placeholder="Ton email"
+
+      <Input v-model="form.email" type="email" placeholder="Ton email" aria-label="Modification email"
         class="w-full p-3 bg-white border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
         required />
 
-      <input v-model="form.firstName" type="firstName" placeholder="Ton prénom"
+      <Input v-model="form.firstName" type="firstName"
         class="w-full p-3 bg-white border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
-        required />
+        required placeholder="Ton prénom" aria-label="Modification Prénom"/>
 
-      <PasswordInput v-model="form.password" placeholder="Mot de passe" />
+      <PasswordInput v-model="form.password" aria-label="Entres ton mot de passe" placeholder="Mot de passe" :min-length="8" />
 
-      <PasswordInput v-model="form.confirmPassword" placeholder="Confirmation mot de passe" />
-      <Button  text="Créer mon compte" ariaLabel="Validation de la création de mon compte" type="submit" />
+      <PasswordInput v-model="form.confirmPassword" placeholder="Confirmation mot de passe" :min-length="8" aria-label="Confirmes mot de passe"/>
+      <p v-if="passwordMismatchError" class="text-sm text-red-500"> </p>
+      <Button text="Créer mon compte" ariaLabel="Validation de la création de mon compte" type="submit" />
 
       <p class="text-center text-xs text-text mt-4">
         Déjà un compte ?
@@ -70,5 +90,5 @@ const handleSubmit = async () => {
         </router-link>
       </p>
     </form>
-  </AuthLayout>
+  </LayoutForm>
 </template>

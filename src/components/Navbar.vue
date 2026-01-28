@@ -27,7 +27,7 @@ function onLogout() {
     <div class="text">ToutCru</div>
 
     <div class="flex gap-4">
-      <router-link to="/home" class="text text-2xl">
+      <router-link to="/home" class="text text-2xl" aria-label="Bouton Menu">
         <PawPrint />
       </router-link>
 
@@ -36,12 +36,10 @@ function onLogout() {
         <SquareX v-else />
       </button>
 
-      <!-- togglerMenu menu devient X -->
-
       <Transition name="slide">
         <div v-if="isMenuOpen"
           class="fixed top-0 right-0 h-full w-64 bg-primary shadow-lg z-50 p-6 flex flex-col justify-center gap-4">
-          <button @click="isMenuOpen = false" class="absolute top-4 right-4 text-2xl hover:opacity-70 transition"
+          <button @click="isMenuOpen = false" class="absolute top-4 right-4 text text-2xl hover:opacity-70 transition"
             aria-label="Fermer le menu">
             <SquareX />
           </button>
@@ -59,8 +57,7 @@ function onLogout() {
             </button>
           </div>
 
-          <div v-else
-            class="fixed top-0 right-0 h-full w-64 bg-primary shadow-lg z-50 p-6 flex flex-col justify-center gap-4">
+          <div v-else>
             <router-link class="flex items-center h-12 px-4 hover:bg-background-alt/100 rounded-xl transition"
               @click="isMenuOpen = false" to="/login">Connexion</router-link>
             <router-link class="flex items-center h-12 px-4 hover:bg-background-alt/100 rounded-xl transition"
