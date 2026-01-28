@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
 import { useRouter } from 'vue-router';
-import AuthLayout from '../components/AuthLayout.vue';
 import PasswordInput from '../components/PasswordInput.vue';
 import { register } from '../services/authService';
 import { useToast } from 'vue-toastification';
 import Button from '../components/Button.vue';
 import Input from '../components/Input.vue';
+import LayoutForm from '../components/LayoutForm.vue';
 
 defineOptions({
   name: 'RegisterPage',
@@ -64,21 +64,22 @@ const handleSubmit = async () => {
 </script>
 
 <template>
-  <AuthLayout title="Créer un compte"
+  <LayoutForm title="Créer un compte"
     description="Envie de te simplifier la vie pour calculer les rations de ton compagnon rejoins nous."
     :play-sound="shouldPlayBark" sound-url="/sounds/bark.mp3">
     <form @submit.prevent="handleSubmit" class="space-y-4">
-      <Input v-model="form.email" type="email" placeholder="Ton email"
+
+      <Input v-model="form.email" type="email" placeholder="Ton email" aria-label="Modification email"
         class="w-full p-3 bg-white border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
         required />
 
       <Input v-model="form.firstName" type="firstName"
         class="w-full p-3 bg-white border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
-        required placeholder="Ton prénom" />
+        required placeholder="Ton prénom" aria-label="Modification Prénom"/>
 
-      <PasswordInput v-model="form.password" placeholder="Mot de passe" :min-length="8" />
+      <PasswordInput v-model="form.password" aria-label="Entres ton mot de passe" placeholder="Mot de passe" :min-length="8" />
 
-      <PasswordInput v-model="form.confirmPassword" placeholder="Confirmation mot de passe" :min-length="8" />
+      <PasswordInput v-model="form.confirmPassword" placeholder="Confirmation mot de passe" :min-length="8" aria-label="Confirmes mot de passe"/>
       <p v-if="passwordMismatchError" class="text-sm text-red-500"> </p>
       <Button text="Créer mon compte" ariaLabel="Validation de la création de mon compte" type="submit" />
 
@@ -89,5 +90,5 @@ const handleSubmit = async () => {
         </router-link>
       </p>
     </form>
-  </AuthLayout>
+  </LayoutForm>
 </template>

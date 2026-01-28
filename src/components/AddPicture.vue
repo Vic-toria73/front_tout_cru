@@ -22,7 +22,7 @@ const altText = ref('');
 <template>
   <div class="space-y-2">
     <label>URL de la photo</label>
-    <input v-model="imageUrl" class="input" />
+   <input type="file" name="add picture" id="">
 
     <label>Description</label>
     <input v-model="altText" class="input" />

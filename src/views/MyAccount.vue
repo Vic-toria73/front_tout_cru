@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import AuthLayout from '../components/AuthLayout.vue';
-import { Dog } from 'lucide-vue-next';
+import LayoutForm from '../components/LayoutForm.vue';
+import { Dog, User, UserCircle } from 'lucide-vue-next';
 import { onMounted, ref } from 'vue';
 import { getCurrentUser, updateMyAccount, updateMyPassword } from '../services/userService';
 import { useToast } from 'vue-toastification';
@@ -107,23 +107,25 @@ const handleSubmitPassword = async () => {
 }
 </script>
 <template>
-  <AuthLayout :title="`Bienvenue ${user.firstName} sur ton compte`" description="Tu peux le modifier ici ⬇️">
+  <LayoutForm :title="`Bienvenue ${user.firstName} sur ton compte`" description="Tu peux le modifier ici ⬇️">
     <template #icon>
-      <Dog class="w-16 h-16 text-primary" />
+      <UserCircle class="w-16 h-16 text-primary" />
     </template>
 
     <form @submit.prevent="handleSubmit" class="space-y-4 mb-8">
       <h3 class="font-semibold text-lg">Modifier mon profil</h3>
 
-      <label>Ton email</label>
-      <input v-model="user.email" type="email" placeholder="Ton email"
-        class="w-full p-3 bg-white border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
-        required />
+      <label>Ton email
+        <input v-model="user.email" type="email" placeholder="Ton email"
+          class="w-full p-3 bg-white border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
+          required />
+      </label>
 
-      <label>Ton prénom</label>
-      <input v-model="user.firstName" type="text" placeholder="Ton prénom"
-        class="w-full p-3 bg-white border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
-        required />
+      <label>Ton prénom
+        <input v-model="user.firstName" type="text" placeholder="Ton prénom"
+          class="w-full p-3 bg-white border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
+          required />
+      </label>
 
       <button type="submit"
         class="w-full bg-primary text py-3 rounded-lg font-semibold text-sm hover:opacity-90 transition">
@@ -133,15 +135,18 @@ const handleSubmitPassword = async () => {
 
     <form @submit.prevent="handleSubmitPassword" class="space-y-4">
       <h3 class="font-semibold text-lg">Changer mon mot de passe</h3>
-      <label>Mot de passe actuel</label>
-      <Input v-model="passwordForm.oldPassword" placeholder="Ancien mot de passe" />
-      <label>Nouveau mot de passe</label>
-      <Input v-model="passwordForm.newPassword" placeholder="Nouveau mot de passe" />
-      <label>Confirmation du nouveau mot de passe</label>
-      <Input v-model="passwordForm.confirmPassword" placeholder="Confirmation du nouveau mot de passe" />
 
+      <label>Mot de passe actuel
+        <Input v-model="passwordForm.oldPassword" placeholder="Ancien mot de passe" />
+      </label>
+      <label>Nouveau mot de passe
+        <Input v-model="passwordForm.newPassword" placeholder="Nouveau mot de passe" />
+      </label>
+      <label>Confirmation du nouveau mot de passe
+        <Input v-model="passwordForm.confirmPassword" placeholder="Confirmation du nouveau mot de passe" />
+      </label>
       <Button type="submit" text="Modifier mon mot de passe" ariaLabel="Modifier le mot de passe de mon profil"
         </Button>
     </form>
-  </AuthLayout>
+  </LayoutForm>
 </template>

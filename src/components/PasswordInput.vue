@@ -36,7 +36,7 @@ const errorMessage = computed(() => {
         <button type="button" @click="showPassword = !showPassword"
             class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm"
             :aria-label="showPassword ? 'Masquer le mot de passe' : 'Afficher le mot de passe'">
-            <Eye />
+            <Eye aria-label="Cacher / voir"/>
         </button>
         <p v-if="errorMessage" class="mt-1 text-sm text-red-500">
             {{ errorMessage }}

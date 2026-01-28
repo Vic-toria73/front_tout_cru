@@ -27,7 +27,7 @@ function onLogout() {
     <div class="text">ToutCru</div>
 
     <div class="flex gap-4">
-      <router-link to="/home" class="text text-2xl">
+      <router-link to="/home" class="text text-2xl" aria-label="Bouton Menu">
         <PawPrint />
       </router-link>
 

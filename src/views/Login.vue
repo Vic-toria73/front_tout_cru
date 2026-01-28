@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router';
-import AuthLayout from '../components/AuthLayout.vue';
 import PasswordInput from '../components/PasswordInput.vue';
 import { login } from '../services/authService';
 import { PawPrint } from 'lucide-vue-next';
 import { useToast } from 'vue-toastification';
 import Input from '../components/Input.vue';
+import LayoutForm from '../components/LayoutForm.vue';
 
 defineOptions({
   name: 'LoginPage',
@@ -30,7 +30,7 @@ const handleSubmit = async () => {
     shouldPlayBark.value = true
 
     setTimeout(() => {
-      router.push('/home')
+      router.push('/mypets')
     }, 1500)
   } catch (error) {
     console.error('Erreur de connexion', error)
@@ -40,7 +40,7 @@ const handleSubmit = async () => {
 </script>
 
 <template>
-  <AuthLayout title="Connecte-toi" description="Tes calculs de rations seront toujours à portée de patte"
+  <LayoutForm title="Connecte-toi" description="Tes calculs de rations seront toujours à portée de patte"
     :play-sound="shouldPlayBark" sound-url="/sounds/bark.mp3">
     <template #icon>
       <PawPrint class="w-16 h-16 text-primary -rotate-45" />
@@ -65,5 +65,5 @@ const handleSubmit = async () => {
         </router-link>
       </p>
     </form>
-  </AuthLayout>
+  </LayoutForm>
 </template>
