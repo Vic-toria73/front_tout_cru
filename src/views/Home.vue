@@ -30,7 +30,7 @@ defineOptions({
                 to="/login" 
                 class="flex-1 bg-primary text-text py-3 rounded-lg font-semibold text-sm hover:opacity-90 transition text-center" 
                 aria-label="Se connecter">
-                Connecte-toi
+                Connectes-toi
             </router-link>
         </div>
     </AuthLayout>
